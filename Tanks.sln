@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tanks", "Tanks\Tanks.csproj", "{9FCB06AE-9138-47B3-A773-9595E828D826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelEditor", "LevelEditor\LevelEditor.csproj", "{530045A6-4DAA-468D-9E9B-08562F325334}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DKFramework", "DKFramework\DKFramework.csproj", "{F3425333-EBC6-49FA-A46C-573EB6BEA092}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9FCB06AE-9138-47B3-A773-9595E828D826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FCB06AE-9138-47B3-A773-9595E828D826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FCB06AE-9138-47B3-A773-9595E828D826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FCB06AE-9138-47B3-A773-9595E828D826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{530045A6-4DAA-468D-9E9B-08562F325334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{530045A6-4DAA-468D-9E9B-08562F325334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{530045A6-4DAA-468D-9E9B-08562F325334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{530045A6-4DAA-468D-9E9B-08562F325334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3425333-EBC6-49FA-A46C-573EB6BEA092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3425333-EBC6-49FA-A46C-573EB6BEA092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3425333-EBC6-49FA-A46C-573EB6BEA092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3425333-EBC6-49FA-A46C-573EB6BEA092}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
