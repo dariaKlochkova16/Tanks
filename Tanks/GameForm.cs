@@ -43,12 +43,12 @@ namespace Tanks
         private void InitCore()
         {
             Core.Instance.GLControl = openGLControl1.OpenGL;
+            Core.Instance.AddComponent<SizeFieldComponentCore>();
+            Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField = new Size(_orhto, _orhto);
             Core.Instance.AddComponent<GraphicComponentCore>();
             Core.Instance.AddComponent<CoreComponentPhyics>();
             Core.Instance.AddComponent<ResoursMenager>();
-            Core.Instance.AddComponent<SizeFieldComponentCore>();
-            Core.Instance.AddComponent<CollisionComponentCore>();
-            Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField = new Size(_orhto, _orhto);
+            Core.Instance.AddComponent<CollisionComponentCore>();       
         }
 
         private void CreatePlayer()
@@ -114,7 +114,7 @@ namespace Tanks
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 LevelFile.Open(openFileDialog1.FileName);
-            CreatePlayer();
+           // CreatePlayer();
         }
 
         private void openGLControl1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)

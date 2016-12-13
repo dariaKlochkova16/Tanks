@@ -16,7 +16,7 @@ namespace DKFramework
 
         public CollisionComponentCore(Core core) : base(core)
         {
-            _core = core;
+            _core = Core.Instance;
             Size = Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField;
             newCollisionMap();
             dynamicObject = new List<GameObject>();
@@ -123,8 +123,7 @@ namespace DKFramework
 
         public override void Update(float deltaTime)
         {
-            return;
-            foreach (GameObject element in dynamicObject)
+            foreach(GameObject element in dynamicObject)
             {
                 if (CrossingTest(element) || Leave(element))
                     element.SendMessage(new MessageCollision());

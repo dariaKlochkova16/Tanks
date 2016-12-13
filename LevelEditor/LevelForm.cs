@@ -52,13 +52,12 @@ namespace LevelEditor
         private void InitCore()
         {
             Core.Instance.GLControl = openGLControl1.OpenGL;
-            Core.Instance.AddComponent<GraphicComponentCore>();
-            Core.Instance.AddComponent<CollisionComponentCore>();
-            Core.Instance.AddComponent<ResoursMenager>();
             Core.Instance.AddComponent<SizeFieldComponentCore>();
             Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField = new Size(_orhto, _orhto);
+            Core.Instance.AddComponent<GraphicComponentCore>();
+            Core.Instance.AddComponent<CollisionComponentCore>();
+            Core.Instance.AddComponent<ResoursMenager>();   
             collisionComponentCore = Core.Instance.GetComponent<CollisionComponentCore>();
-            collisionComponentCore.newCollisionMap();
         }
 
         private void openGLControl1_OpenGLDraw(object sender, RenderEventArgs e)
@@ -333,6 +332,9 @@ namespace LevelEditor
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Core.Instance.ReCreate();
+            InitCore();
+
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
             openFileDialog1.InitialDirectory = "C:\\Users\\даша\\Documents\\OOP\\ЛАБЫ\\Tanks\\LevelEditor\\bin\\Debug\\";

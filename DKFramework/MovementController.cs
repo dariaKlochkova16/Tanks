@@ -25,6 +25,15 @@ namespace DKFramework
         private void LinkGameObject_MessageReceived(object sender, EventArgs e)
         {
             Moving = false;
+            GameObject gameObject = (GameObject)sender;
+            Transform transform = gameObject.GetComponent<Transform>();
+
+            LinkGameObject.GetComponent<Transform>().Position = new PointF(
+                Mathem.Clamp(0, 51, transform.X),
+                Mathem.Clamp(-51, 0, transform.Y));
+            Moving = false;
+            if (EndMovement != null)
+                EndMovement(this, new EventArgs());
         }
 
         public void MakeMovement(int distance)
@@ -67,8 +76,6 @@ namespace DKFramework
             Moving = true;
         }
 
-        
-
         public override void Update(float deltaTime)
         {
             if (!Moving)
@@ -86,20 +93,9 @@ namespace DKFramework
             }
 
             var positon = Mathem.Lerp(_startPosition, _finishPosition, _pastTime / _maneuverTime);
-
-            //if (Leave(positon))
-            //{
-            //LinkGameObject.GetComponent<Transform>().Position = new PointF(
-            //    Mathem.Clamp(0, 51, positon.X),
-            //    Mathem.Clamp(-51, 0, positon.Y));
-            //Moving = false;
-            //if (EndMovement != null)
-            //    EndMovement(this, new EventArgs());
-            //}
-            //else
-            //{
+         
             LinkGameObject.GetComponent<Transform>().Position = positon;
-            //}
+          
         }
      
     }

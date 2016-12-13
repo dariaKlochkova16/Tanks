@@ -15,7 +15,7 @@ namespace DKFramework
 
         private void EndMovement(object sender, EventArgs e)
         {
-            //Core.Instance.Remove(LinkGameObject);
+            Core.Instance.Remove(LinkGameObject);
         }
     }
 }
