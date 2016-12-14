@@ -12,47 +12,50 @@ namespace DKFramework
             gameObject.AddComponent<Render>();
             gameObject.GetComponent<Render>().TextureFileName = "TextureCard.png";
             gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-            gameObject.AddComponent<AddToCollisionMap>();
+            
         
 
             switch (objectType)
             {
                 case ObjectType.BrickWall:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-                    gameObject.GetComponent<AddToCollisionMap>().Add(false);
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = false;
                     break;
                 case ObjectType.ConcreteWall:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-                    gameObject.GetComponent<AddToCollisionMap>().Add(false);
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = false;
                     break;
-                case ObjectType.Forest:
-                    gameObject.GetComponent<AddToCollisionMap>().Add(false);
+                case ObjectType.Forest:  
                     break;
                 case ObjectType.Ice:
-                    gameObject.GetComponent<AddToCollisionMap>().Add(false);
                     break;
                 case ObjectType.Water:
-                    gameObject.GetComponent<AddToCollisionMap>().Add(false);
                     break;
                 case ObjectType.Base:
-                    gameObject.GetComponent<AddToCollisionMap>().Add(false);
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = false;
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(3, 3);
                     break;
                 case ObjectType.Enemy:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
                     gameObject.AddComponent<MovementController>();
-                    gameObject.GetComponent<AddToCollisionMap>().Add(true);
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = true;
                     break;
                 case ObjectType.Player:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
                     gameObject.AddComponent<MovementController>();
                     gameObject.AddComponent<ShootComponent>();
-                    gameObject.GetComponent<AddToCollisionMap>().Add(true);
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = true;
                     break;
                 case ObjectType.Bullet:
                     gameObject.AddComponent<MovementController>();
                     gameObject.AddComponent<BulletController>();
-                    gameObject.GetComponent<AddToCollisionMap>().Add(true);
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = true;
                     break;
                 default:
                     gameObject = null;

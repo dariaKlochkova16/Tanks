@@ -22,15 +22,14 @@ namespace DKFramework
             LinkGameObject.MessageReceived += LinkGameObject_MessageReceived;
         }
 
-        private void LinkGameObject_MessageReceived(object sender, EventArgs e)
+        private void LinkGameObject_MessageReceived(object sender, MessageBase message)
         {
-            Moving = false;
-            GameObject gameObject = (GameObject)sender;
-            Transform transform = gameObject.GetComponent<Transform>();
+            if (message is MessageCollision)
+            {
+                MessageCollision messageCollision = (MessageCollision)message;
+                LinkGameObject.GetComponent<Transform>().Position = messageCollision.Point;
+            }
 
-            LinkGameObject.GetComponent<Transform>().Position = new PointF(
-                Mathem.Clamp(0, 51, transform.X),
-                Mathem.Clamp(-51, 0, transform.Y));
             Moving = false;
             if (EndMovement != null)
                 EndMovement(this, new EventArgs());
@@ -49,7 +48,6 @@ namespace DKFramework
 
             _startPosition = LinkGameObject.GetComponent<Transform>().Position;
 
-            // TODO
             int distanceX = 0, distanceY = 0;
             switch (LinkGameObject.GetComponent<Transform>().Rotaton)
             {

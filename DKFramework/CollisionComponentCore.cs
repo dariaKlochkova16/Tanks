@@ -9,7 +9,7 @@ namespace DKFramework
         private List<GameObject> dynamicObject;
         private bool[,] _collisionMap;
 
-        public Size Size
+        public Size SizeField
         {
             get; set;
         }
@@ -17,35 +17,76 @@ namespace DKFramework
         public CollisionComponentCore(Core core) : base(core)
         {
             _core = Core.Instance;
-            Size = Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField;
+            SizeField = Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField;
             newCollisionMap();
             dynamicObject = new List<GameObject>();
         }
 
         public bool CrossingTest(GameObject gameObject)
         {
-            float x = gameObject.GetComponent<Transform>().X;
-            float y = Math.Abs(gameObject.GetComponent<Transform>().Y);
+            PointF point;
+            return CrossingTest(gameObject, out point);
+        }
 
-            for (int i = 0; i < gameObject.GetComponent<Transform>().Size.Width; i++)
+        public bool CrossingTest(GameObject gameObject, out PointF point)
+        {
+            Transform transform = gameObject.GetComponent<Transform>();
+            int x = Math.Abs((int)transform.X);
+            
+            float colliderX = transform.X - x + transform.Size.Width;
+
+            if(colliderX != 2)
             {
-                for (int j = 0; j < gameObject.GetComponent<Transform>().Size.Height; j++)
-                {
-                    if ((x + i <= (_collisionMap.GetLength(0) - 1)) && (x + i > 0 || x + i == 0) && (y + j <= (_collisionMap.GetLength(1) - 1)) && (y + j > 0 || y + j == 0))
-                    {
-                        if (_collisionMap[(int)x + i, (int)y + j])
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
+                int w = 0;
+                w++;
             }
+
+            while(colliderX  > 0)
+            {
+                int y = Math.Abs((int)transform.Y);
+                float colliderY = Math.Abs(transform.Y) - y + transform.Size.Height;
+                while (colliderY  > 0)
+                {
+                    if (x < SizeField.Width && y < SizeField.Height)
+                    {
+                        if (_collisionMap[x, y] == true)
+                        {
+                            point = BackPosition(gameObject, x, -y);
+                            return true;
+                        }   
+                    }
+                    y++;
+                    colliderY--;
+                }
+                x++;
+                colliderX--;
+            }
+            point = new PointF();
             return false;
         }
+
+        private PointF BackPosition(GameObject gameObject, int x, int y)
+        {
+            PointF point = new PointF();
+            Transform transform = gameObject.GetComponent<Transform>();
+            switch (transform.Rotaton)
+            {
+                case Rotation.Down:
+                    point = new PointF(transform.X, y + transform.Size.Height);
+                    break;
+                case Rotation.Up:
+                    point = new PointF(transform.X, y - transform.Size.Height + 1);
+                    break;
+                case Rotation.Right:
+                    point = new PointF(x - transform.Size.Width, transform.Y);
+                    break;
+                case Rotation.Left:
+                    point = new PointF(x + transform.Size.Width - 1, transform.Y);
+                    break;   
+            }
+            return point;
+        }
+     
 
         private void CreateCollisionMap()
         {
@@ -110,10 +151,10 @@ namespace DKFramework
 
         public void newCollisionMap()
         {
-            _collisionMap = new bool[Size.Width, Size.Height];
-            for (int i = 0; i < Size.Width; i++)
+            _collisionMap = new bool[SizeField.Width, SizeField.Height];
+            for (int i = 0; i < SizeField.Width; i++)
             {
-                for (int j = 0; j < Size.Height; j++)
+                for (int j = 0; j < SizeField.Height; j++)
                 {
                     _collisionMap[i, j] = false;
                 }
@@ -123,20 +164,31 @@ namespace DKFramework
 
         public override void Update(float deltaTime)
         {
-            foreach(GameObject element in dynamicObject)
+            PointF point;
+            foreach (GameObject element in dynamicObject)
             {
-                if (CrossingTest(element) || Leave(element))
-                    element.SendMessage(new MessageCollision());
+                if (CrossingTest(element, out point))
+                    element.SendMessage(new MessageCollision(point));
+                if (Leave(element, out point))
+                    element.SendMessage(new MessageCollision(point));
             }
         }
 
-        private bool Leave(GameObject gameObject)
+        private bool Leave(GameObject gameObject, out PointF point)
         {
-            float x = gameObject.GetComponent<Transform>().X;
-            float y = gameObject.GetComponent<Transform>().Y;
-            if (x < Size.Width - 1 && y > -Size.Height + 2 && y <= 0 && x > 0)
+            Transform transform = gameObject.GetComponent<Transform>();
+            float x = transform.X;
+            float y = transform.Y;
+            if (x < SizeField.Width - transform.Size.Width && y > -SizeField.Height + transform.Size.Height
+                    && y <= 0 && x > 0)
+            {
+                point = new PointF(x, y);
                 return false;
-            return true;
+            }
+                point = new PointF(
+                Mathem.Clamp(0, SizeField.Width - transform.Size.Width, transform.X),
+                Mathem.Clamp(-SizeField.Height + transform.Size.Height, 0, transform.Y));
+                return true;
         }
 
     }

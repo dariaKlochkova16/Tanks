@@ -6,17 +6,18 @@ namespace DKFramework
 {
     public class GameObject
     {
-        public string Name { get ; set; }
+        public string Name { get; set; }
+
         private readonly List<ComponentBase> _listComponents = new List<ComponentBase>();
 
-        public event EventHandler MessageReceived;
+        public event EventHandler<MessageBase> MessageReceived;
 
         public GameObject(string name)
         {
             Name = name;
         }
 
-        public void AddComponent<T>() where T: ComponentBase
+        public void AddComponent<T>() where T : ComponentBase
         {
             _listComponents.Add((ComponentBase)Activator.CreateInstance(typeof(T), this));
         }
@@ -42,7 +43,7 @@ namespace DKFramework
 
         public void SendMessage(MessageBase message)
         {
-            MessageReceived(this, new EventArgs());
+            MessageReceived(this, message);
         }
 
     }

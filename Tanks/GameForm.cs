@@ -54,9 +54,10 @@ namespace Tanks
         private void CreatePlayer()
         {
             _tank = GameObjectFactory.CreateGameObject(ObjectType.Player);
-            _tank.GetComponent<Transform>().X = 10;
+            _tank.GetComponent<Transform>().X = 30;
             _tank.GetComponent<Transform>().Y = -30;
             _tankController = _tank.GetComponent<MovementController>();
+            _tank.GetComponent<Collider>().Add();
 
             Core.Instance.Add(_tank);
 
@@ -114,7 +115,8 @@ namespace Tanks
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 LevelFile.Open(openFileDialog1.FileName);
-           // CreatePlayer();
+            // CreatePlayer();
+            openGLControl1.Refresh();
         }
 
         private void openGLControl1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)

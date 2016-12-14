@@ -18,6 +18,8 @@
 
             _bullet.GetComponent<MovementController>().MakeMovement(100);
 
+            _bullet.GetComponent<Collider>().Add();
+
             return _bullet;
         }
 
