@@ -31,8 +31,8 @@ namespace DKFramework
             for (int i = 0; i < Core.Instance.Count; i++)
             {
                 saveObjects[i] = new SaveObject();
-                saveObjects[i].name = Core.Instance.GetElenent(i).Name;
-                saveObjects[i].point = new PointF(Core.Instance.GetElenent(i).GetComponent<Transform>().X, Core.Instance.GetElenent(i).GetComponent<Transform>().Y);
+                saveObjects[i].name = Core.Instance.GetElement(i).Name;
+                saveObjects[i].point = new PointF(Core.Instance.GetElement(i).GetComponent<Transform>().X, Core.Instance.GetElement(i).GetComponent<Transform>().Y);
             }
 
             TextWriter writer = new StreamWriter(fileName);

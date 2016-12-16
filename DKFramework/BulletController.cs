@@ -10,11 +10,14 @@ namespace DKFramework
         {
             _movementController = LinkGameObject.GetComponent<MovementController>();
             if (LinkGameObject.GetComponent<MovementController>() != null)
-                _movementController.EndMovement += new EventHandler(EndMovement);
+                _movementController.EndMovement += new EventHandler<MessageBase>(EndMovement);
         }
 
-        private void EndMovement(object sender, EventArgs e)
+        private void EndMovement(object sender, MessageBase message)
         {
+            MessageCollision messageCollision = (MessageCollision)message;
+            if (messageCollision.GameObject != null && messageCollision.GameObject.GetComponent<DamagedReceiver>() != null)
+                messageCollision.GameObject.GetComponent<DamagedReceiver>().DamageCaused(1);
             Core.Instance.Remove(LinkGameObject);
         }
     }

@@ -7,6 +7,8 @@ namespace DKFramework
 {
     public class Core
     {
+        public event EventHandler DiedGameObject;
+
         private static Core _instance;
         public static Core Instance
         {
@@ -49,6 +51,8 @@ namespace DKFramework
         public void Remove(GameObject element)
         {
             _elements.Remove(element);
+            if (DiedGameObject != null)
+                DiedGameObject(element, new EventArgs());
         }
 
         public void Clear()
@@ -61,9 +65,20 @@ namespace DKFramework
             get { return _elements.Count; }
         }
 
-        public GameObject GetElenent(int i)
+        public GameObject GetElement(int i)
         {
             return _elements[i];
+        }
+
+        public GameObject GetElement(int x, int y)
+        {
+            foreach(GameObject el in _elements)
+            {
+                Transform transform = el.GetComponent<Transform>();
+                if (transform.X == x && transform.Y == y)
+                    return el;
+            }
+            return null;
         }
 
         public T GetComponent<T>()

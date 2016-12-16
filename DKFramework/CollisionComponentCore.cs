@@ -17,6 +17,7 @@ namespace DKFramework
         public CollisionComponentCore(Core core) : base(core)
         {
             _core = Core.Instance;
+            _core.DiedGameObject += new EventHandler(Remove);
             SizeField = Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField;
             newCollisionMap();
             dynamicObject = new List<GameObject>();
@@ -25,10 +26,11 @@ namespace DKFramework
         public bool CrossingTest(GameObject gameObject)
         {
             PointF point;
-            return CrossingTest(gameObject, out point);
+            GameObject collisionObject;
+            return CrossingTest(gameObject, out point, out  collisionObject);
         }
 
-        public bool CrossingTest(GameObject gameObject, out PointF point)
+        public bool CrossingTest(GameObject gameObject, out PointF point, out GameObject collisionObject)
         {
             Transform transform = gameObject.GetComponent<Transform>();
             int x = Math.Abs((int)transform.X);
@@ -52,6 +54,7 @@ namespace DKFramework
                         if (_collisionMap[x, y] == true)
                         {
                             point = BackPosition(gameObject, x, -y);
+                            collisionObject = Core.Instance.GetElement(x, -y);
                             return true;
                         }   
                     }
@@ -62,6 +65,7 @@ namespace DKFramework
                 colliderX--;
             }
             point = new PointF();
+            collisionObject = new GameObject("");
             return false;
         }
 
@@ -92,11 +96,11 @@ namespace DKFramework
         {
             for (int k = 0; k < _core.Count; k++)
             {
-                float x = _core.GetElenent(k).GetComponent<Transform>().X;
-                float y = Math.Abs(_core.GetElenent(k).GetComponent<Transform>().Y);
-                for (int i = 0; i < _core.GetElenent(k).GetComponent<Transform>().Size.Width; i++)
+                float x = _core.GetElement(k).GetComponent<Transform>().X;
+                float y = Math.Abs(_core.GetElement(k).GetComponent<Transform>().Y);
+                for (int i = 0; i < _core.GetElement(k).GetComponent<Transform>().Size.Width; i++)
                 {
-                    for (int j = 0; j < _core.GetElenent(k).GetComponent<Transform>().Size.Height; j++)
+                    for (int j = 0; j < _core.GetElement(k).GetComponent<Transform>().Size.Height; j++)
                     {
                         x += i;
                         y += j;
@@ -149,6 +153,15 @@ namespace DKFramework
             }
         }
 
+        //TODO сделать для флотовых координат
+        public void Remove(Object sender, EventArgs e)
+        {
+            GameObject gameObject = (GameObject)sender;
+            Transform transform = gameObject.GetComponent<Transform>();
+            Remove((int)transform.X, (int)transform.Y, transform.Size);
+        }
+
+
         public void newCollisionMap()
         {
             _collisionMap = new bool[SizeField.Width, SizeField.Height];
@@ -164,13 +177,14 @@ namespace DKFramework
 
         public override void Update(float deltaTime)
         {
+            GameObject collisionObject;
             PointF point;
             foreach (GameObject element in dynamicObject)
             {
-                if (CrossingTest(element, out point))
-                    element.SendMessage(new MessageCollision(point));
+                if (CrossingTest(element, out point,out collisionObject))
+                    element.SendMessage(new MessageCollision(point, collisionObject));
                 if (Leave(element, out point))
-                    element.SendMessage(new MessageCollision(point));
+                    element.SendMessage(new MessageCollision(point, collisionObject));
             }
         }
 
@@ -179,8 +193,8 @@ namespace DKFramework
             Transform transform = gameObject.GetComponent<Transform>();
             float x = transform.X;
             float y = transform.Y;
-            if (x < SizeField.Width - transform.Size.Width && y > -SizeField.Height + transform.Size.Height
-                    && y <= 0 && x > 0)
+            if (x <= SizeField.Width - transform.Size.Width && y >= -SizeField.Height + transform.Size.Height
+                    && y <= 0 && x >= 0)
             {
                 point = new PointF(x, y);
                 return false;

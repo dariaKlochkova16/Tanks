@@ -9,6 +9,7 @@ namespace Tanks
     public partial class GameForm : Form
     {
         private GameObject _tank;
+        private GameObject _enemy;
         private const int _orhto = 52;
 
         private DateTime _pastUpdateTime;
@@ -33,6 +34,7 @@ namespace Tanks
             TextureCard = Core.Instance.GetComponent<ResoursMenager>().TextureCard;
 
             CreatePlayer();
+            CreateEnemy();
 
             FPStimer.Interval = 1000;
             moveTimer.Start();
@@ -49,6 +51,16 @@ namespace Tanks
             Core.Instance.AddComponent<CoreComponentPhyics>();
             Core.Instance.AddComponent<ResoursMenager>();
             Core.Instance.AddComponent<CollisionComponentCore>();       
+        }
+
+        private void CreateEnemy()
+        {
+            _enemy = GameObjectFactory.CreateGameObject(ObjectType.Enemy);
+            _enemy.GetComponent<Transform>().X = 10;
+            _enemy.GetComponent<Transform>().Y = -30;
+            _enemy.GetComponent<Collider>().Add();
+
+            Core.Instance.Add(_enemy);
         }
 
         private void CreatePlayer()

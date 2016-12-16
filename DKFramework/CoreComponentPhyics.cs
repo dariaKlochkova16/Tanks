@@ -12,8 +12,11 @@
 
             for(int i = 0; i < _core.Count; i++)
             {
-                if (_core.GetElenent(i).GetComponent<MovementController>() != null)
-                    _core.GetElenent(i).GetComponent<MovementController>().Update(deltaTime);
+                if (_core.GetElement(i).GetComponent<MovementController>() != null)
+                    _core.GetElement(i).GetComponent<MovementController>().Update(deltaTime);
+
+                if (_core.GetElement(i).GetComponent<AI>() != null)
+                    _core.GetElement(i).GetComponent<AI>().Update(deltaTime);
             }      
         }
     }

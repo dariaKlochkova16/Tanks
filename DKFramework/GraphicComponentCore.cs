@@ -13,7 +13,7 @@ namespace DKFramework
         override public void OnDraw(OpenGL gl)
         {
             for(int i = 0; i < _core.Count; i++)
-                _core.GetElenent(i).renderer.Draw(gl);
+                _core.GetElement(i).renderer.Draw(gl);
         }
     }
 }

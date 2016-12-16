@@ -361,7 +361,7 @@ namespace LevelEditor
         {
             for (int i = 0; i < Core.Instance.Count; i++)
             {
-                if (Core.Instance.GetElenent(i).Name == objectType.ToString())
+                if (Core.Instance.GetElement(i).Name == objectType.ToString())
                 {
                     return true;
                 }
@@ -373,16 +373,16 @@ namespace LevelEditor
         {
             for (int i = 0; i < Core.Instance.Count; i++)
             {
-                float coreX = Math.Abs(Core.Instance.GetElenent(i).GetComponent<Transform>().X);
-                float coreY = Math.Abs(Core.Instance.GetElenent(i).GetComponent<Transform>().Y);
-                Size size = Core.Instance.GetElenent(i).GetComponent<Transform>().Size;
+                float coreX = Math.Abs(Core.Instance.GetElement(i).GetComponent<Transform>().X);
+                float coreY = Math.Abs(Core.Instance.GetElement(i).GetComponent<Transform>().Y);
+                Size size = Core.Instance.GetElement(i).GetComponent<Transform>().Size;
                 if (coreX <= Math.Abs(x)
                     && coreY <= Math.Abs(y)
                    && coreX + size.Width >= Math.Abs(x)
                    && coreY + size.Height >= Math.Abs(y))
                 {
                     collisionComponentCore.Remove((int)coreX, (int)coreY, size);
-                    Core.Instance.Remove(Core.Instance.GetElenent(i));
+                    Core.Instance.Remove(Core.Instance.GetElement(i));
                     break;
                 }
             }

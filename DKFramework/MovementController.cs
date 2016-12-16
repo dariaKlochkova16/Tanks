@@ -8,7 +8,7 @@ namespace DKFramework
         private float _maneuverTime;
         private float _pastTime = 0;
 
-        public event EventHandler EndMovement;
+        public event EventHandler<MessageBase> EndMovement;
 
         public float Velocity { get; set; } = 5;
 
@@ -32,7 +32,7 @@ namespace DKFramework
 
             Moving = false;
             if (EndMovement != null)
-                EndMovement(this, new EventArgs());
+                EndMovement(this, message);
         }
 
         public void MakeMovement(int distance)
@@ -86,7 +86,7 @@ namespace DKFramework
                 LinkGameObject.GetComponent<Transform>().Position = _finishPosition;
                 Moving = false;
                 if(EndMovement != null)
-                    EndMovement(this, new EventArgs());
+                   // EndMovement(this, new EventArgs());
                 return;
             }
 

@@ -12,9 +12,9 @@ namespace DKFramework
             gameObject.AddComponent<Render>();
             gameObject.GetComponent<Render>().TextureFileName = "TextureCard.png";
             gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-            
-        
-
+            gameObject.AddComponent<DamagedReceiver>();
+            gameObject.GetComponent<DamagedReceiver>().Health = 1;
+ 
             switch (objectType)
             {
                 case ObjectType.BrickWall:
@@ -43,6 +43,8 @@ namespace DKFramework
                     gameObject.AddComponent<MovementController>();
                     gameObject.AddComponent<Collider>();
                     gameObject.GetComponent<Collider>().IsStatic = true;
+                    gameObject.AddComponent<AI>();
+                    gameObject.AddComponent<ShootComponent>();
                     break;
                 case ObjectType.Player:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
@@ -56,6 +58,7 @@ namespace DKFramework
                     gameObject.AddComponent<BulletController>();
                     gameObject.AddComponent<Collider>();
                     gameObject.GetComponent<Collider>().IsStatic = true;
+                    gameObject.GetComponent<MovementController>().Velocity = 7;
                     break;
                 default:
                     gameObject = null;

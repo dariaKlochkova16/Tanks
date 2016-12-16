@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI.cs" />
     <Compile Include="Collider.cs" />
     <Compile Include="BulletController.cs" />
     <Compile Include="CollisionComponentCore.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Core.cs" />
     <Compile Include="CoreComponentBase.cs" />
     <Compile Include="CoreComponentPhyics.cs" />
+    <Compile Include="DamagedReceiver.cs" />
     <Compile Include="GameObjectFactory.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameObjectGroup.cs" />
