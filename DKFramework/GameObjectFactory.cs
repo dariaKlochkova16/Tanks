@@ -19,6 +19,7 @@ namespace DKFramework
             {
                 case ObjectType.BrickWall:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
+                    gameObject.GetComponent<Transform>().Z = 0;
                     gameObject.AddComponent<Collider>();
                     gameObject.GetComponent<Collider>().IsStatic = true;
                     break;
@@ -26,17 +27,22 @@ namespace DKFramework
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
                     gameObject.AddComponent<Collider>();
                     gameObject.GetComponent<Collider>().IsStatic = true;
+                    gameObject.GetComponent<Transform>().Z = 0;
                     break;
-                case ObjectType.Forest:  
+                case ObjectType.Forest:
+                    gameObject.GetComponent<Transform>().Z = 1;
                     break;
                 case ObjectType.Ice:
+                    gameObject.GetComponent<Transform>().Z = -1;
                     break;
                 case ObjectType.Water:
+                    gameObject.GetComponent<Transform>().Z = -1;
                     break;
                 case ObjectType.Base:
                     gameObject.AddComponent<Collider>();
                     gameObject.GetComponent<Collider>().IsStatic = true;
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(3, 3);
+                    gameObject.GetComponent<Transform>().Z = 0;
                     break;
                 case ObjectType.Enemy:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
@@ -46,6 +52,7 @@ namespace DKFramework
                     gameObject.AddComponent<AI>();
                     gameObject.AddComponent<ShootComponent>();
                     gameObject.GetComponent<Collider>().CollisionLayer = CollisionLayer.EnemyBullet;
+                    gameObject.GetComponent<Transform>().Z = 0;
                     break;
                 case ObjectType.Player:
                     gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
@@ -55,6 +62,7 @@ namespace DKFramework
                     gameObject.GetComponent<Collider>().IsStatic = false;
                     gameObject.GetComponent<Collider>().CollisionLayer = CollisionLayer.PlayerBullet;
                     gameObject.GetComponent<MovementController>().Velocity = 8;
+                    gameObject.GetComponent<Transform>().Z = 0;
                     break;
                 case ObjectType.Bullet:
                     gameObject.AddComponent<MovementController>();
@@ -62,6 +70,7 @@ namespace DKFramework
                     gameObject.AddComponent<Collider>();
                     gameObject.GetComponent<Collider>().IsStatic = false;
                     gameObject.GetComponent<MovementController>().Velocity = 10;
+                    gameObject.GetComponent<Transform>().Z = 0;
                     break;
                 default:
                     gameObject = null;

@@ -2,6 +2,7 @@
 using SharpGL;
 using System;
 using System.Drawing;
+using System.Media;
 using System.Windows.Forms;
 
 namespace Tanks
@@ -47,7 +48,7 @@ namespace Tanks
             Core.Instance.AddComponent<CollisionComponentCore>();
             Core.Instance.AddComponent<InputManager>();
             Core.Instance.AddComponent<WinManager>();
-            Core.Instance.GetComponent<WinManager>().GameEnd += new EventHandler<string>(GameEnd);  
+            Core.Instance.GetComponent<WinManager>().GameEnd += new EventHandler<string>(GameEnd);
         }
 
         private void openGLControl1_OpenGLDraw(object sender, RenderEventArgs e)
@@ -90,9 +91,7 @@ namespace Tanks
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                Core.Instance.ReCreate();
-                InitCore();
-                LevelFile.Open(openFileDialog1.FileName);
+                NewGame(openFileDialog1.FileName);
             }
 
             CoreTimer.Start();
@@ -102,38 +101,38 @@ namespace Tanks
 
         private void openGLControl1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-                    switch (e.KeyCode)
+            switch (e.KeyCode)
+            {
+                case Keys.Down:
                     {
-                        case Keys.Down:
-                            {
-                                SetRotation(Rotation.Down);
-                            }
-                            break;
-                        case Keys.Up:
-                            {
-                                SetRotation(Rotation.Up);
-                            }
-                            break;
-                        case Keys.Left:
-                            {
-                                SetRotation(Rotation.Left);
-                            }
-                            break;
-                        case Keys.Right:
-                            {
-                                SetRotation(Rotation.Right);
-                            }
-                            break;
-                        case Keys.Space:
-                            Shot();
-                            break;
+                        SetRotation(Rotation.Down);
                     }
+                    break;
+                case Keys.Up:
+                    {
+                        SetRotation(Rotation.Up);
+                    }
+                    break;
+                case Keys.Left:
+                    {
+                        SetRotation(Rotation.Left);
+                    }
+                    break;
+                case Keys.Right:
+                    {
+                        SetRotation(Rotation.Right);
+                    }
+                    break;
+                case Keys.Space:
+                    Shot();
+                    break;
+            }
         }
 
         private void SetRotation(Rotation rot)
         {
-                Core.Instance.GetComponent<InputManager>().Rotate(rot);
-                keyPress = true;
+            Core.Instance.GetComponent<InputManager>().Rotate(rot);
+            keyPress = true;
         }
 
         private void Shot()
@@ -143,6 +142,7 @@ namespace Tanks
             {
                 Core.Instance.GetComponent<InputManager>().Shoot();
                 _pastShoot = DateTime.Now;
+                playSound("fire.wav");
             }
         }
 
@@ -195,24 +195,42 @@ namespace Tanks
         private void moveTimer_Tick(object sender, EventArgs e)
         {
             if (keyPress)
+            {
                 Core.Instance.GetComponent<InputManager>().MakeMovement();
+            }
         }
         private void GameEnd(object sender, string e)
         {
+            playSound("gameover.wav");
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-           var result =  MessageBox.Show(this, e+"Начать заново?","Конец игры", buttons);
+            var result = MessageBox.Show(this, e + "Начать заново?", "Конец игры", buttons);
 
-            if(result ==  DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
-                Core.Instance.ReCreate();
-                InitCore();
-                LevelFile.Open(_nameOpenFile);
+                NewGame(_nameOpenFile);
             }
 
-            if(result == DialogResult.No)
+            if (result == DialogResult.No)
             {
                 CoreTimer.Stop();
             }
+        }
+
+        private void NewGame(string nameOpenFile)
+        {
+            Core.Instance.ReCreate();
+            InitCore();
+            LevelFile.Open(nameOpenFile);
+            playSound("gamestart.wav");
+        }
+
+        private void playSound(string path)
+        {
+            SoundPlayer player =
+                new SoundPlayer();
+            player.SoundLocation = path;
+            player.Load();
+            player.Play();
         }
 
     }

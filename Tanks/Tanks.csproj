@@ -99,6 +99,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="background.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fire.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="gameover.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="gamestart.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TextureCard.png" />
     <Content Include="TextureDescriptor.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

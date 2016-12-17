@@ -142,7 +142,7 @@ namespace DKFramework
                 {
                     for (int j = 0; j < transform.Size.Height; j++)
                     {
-                        if ((x <= (_collisionMap.GetLength(0) - 1)) && (y <= (_collisionMap.GetLength(1) - 1)))
+                        if ((x + i <= (_collisionMap.GetLength(0) - 1)) && (y + j <= (_collisionMap.GetLength(1) - 1)))
                         {
                             _collisionMap[x + i, y + j].isBusy = true;
                             _collisionMap[x + i, y + j].CellGameObject = gameObject;

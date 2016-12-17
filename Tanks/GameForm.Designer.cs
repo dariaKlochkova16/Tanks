@@ -50,7 +50,7 @@
             this.openGLControl1.OpenGLVersion = SharpGL.Version.OpenGLVersion.OpenGL2_1;
             this.openGLControl1.RenderContextType = SharpGL.RenderContextType.NativeWindow;
             this.openGLControl1.RenderTrigger = SharpGL.RenderTrigger.Manual;
-            this.openGLControl1.Size = new System.Drawing.Size(805, 517);
+            this.openGLControl1.Size = new System.Drawing.Size(752, 705);
             this.openGLControl1.TabIndex = 0;
             this.openGLControl1.OpenGLInitialized += new System.EventHandler(this.openGLControl1_OpenGLInitialized);
             this.openGLControl1.OpenGLDraw += new SharpGL.RenderEventHandler(this.openGLControl1_OpenGLDraw);
@@ -63,7 +63,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(805, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(752, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -102,7 +102,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(805, 541);
+            this.ClientSize = new System.Drawing.Size(752, 729);
             this.Controls.Add(this.openGLControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;

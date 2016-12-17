@@ -10,8 +10,6 @@ namespace DKFramework
 
         public string TextureFileName { get; set; }
 
-        public Render(GameObject linkGameObject) : base(linkGameObject) { }
-
         public Bitmap Image { get; set; }
         
         public Rectangle RectangleImage
@@ -19,6 +17,8 @@ namespace DKFramework
             get { return _rectangleImage; }
             set { _rectangleImage = value; }
         }
+
+        public Render(GameObject linkGameObject) : base(linkGameObject) { }
 
         public void Draw(OpenGL gl)
         {

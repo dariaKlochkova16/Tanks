@@ -21,6 +21,7 @@
 
         public void MakeMovement()
         {
+            if (_core.FindElement(ObjectType.Player) != null)
             _core.FindElement(ObjectType.Player).GetComponent<MovementController>().MakeMovement(1);
         }
     }
