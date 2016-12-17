@@ -50,7 +50,7 @@ namespace DKFramework
 
         public void Remove(GameObject element)
         {
-            _elements.Remove(element);
+            _elements.Remove(element);       
             if (DiedGameObject != null)
                 DiedGameObject(element, new EventArgs());
         }
@@ -70,12 +70,12 @@ namespace DKFramework
             return _elements[i];
         }
 
-        public GameObject GetElement(int x, int y)
+        public GameObject GetElement(float x, float y)
         {
             foreach(GameObject el in _elements)
             {
                 Transform transform = el.GetComponent<Transform>();
-                if (transform.X == x && transform.Y == y)
+                if (Math.Abs(transform.X - x) < 1 && Math.Abs(transform.Y - y) < 1)
                     return el;
             }
             return null;
@@ -101,10 +101,25 @@ namespace DKFramework
             Draw();
         }
 
-
         public void ReCreate()
         {
             _instance = new Core();
         }
+
+        public GameObject FindElement(ObjectType objectType)
+        {
+            string name = objectType.ToString();
+            for (int i = 0; i < Count; i++)
+            {
+                if (Core.Instance._elements[i].Name == name)
+                {
+                    var gameObject = _elements[i];
+                    return gameObject; 
+                }
+            }
+            return null;
+        }
+
+
     }
 }

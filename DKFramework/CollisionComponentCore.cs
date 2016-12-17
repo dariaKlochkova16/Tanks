@@ -7,7 +7,8 @@ namespace DKFramework
     public class CollisionComponentCore : CoreComponentBase
     {
         private List<GameObject> dynamicObject;
-        private bool[,] _collisionMap;
+        private CellData[,] _collisionMap;
+        private CellData[,] _dynamicCollisionMap;
 
         public Size SizeField
         {
@@ -19,7 +20,7 @@ namespace DKFramework
             _core = Core.Instance;
             _core.DiedGameObject += new EventHandler(Remove);
             SizeField = Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField;
-            newCollisionMap();
+            _collisionMap = NewCollisionMap();
             dynamicObject = new List<GameObject>();
         }
 
@@ -27,36 +28,40 @@ namespace DKFramework
         {
             PointF point;
             GameObject collisionObject;
-            return CrossingTest(gameObject, out point, out  collisionObject);
+            return CrossingTest(gameObject, out point, out collisionObject);
         }
 
         public bool CrossingTest(GameObject gameObject, out PointF point, out GameObject collisionObject)
         {
+            CreateDynamicCollisionMap(gameObject);
             Transform transform = gameObject.GetComponent<Transform>();
             int x = Math.Abs((int)transform.X);
-            
+
             float colliderX = transform.X - x + transform.Size.Width;
 
-            if(colliderX != 2)
-            {
-                int w = 0;
-                w++;
-            }
-
-            while(colliderX  > 0)
+            while (colliderX > 0)
             {
                 int y = Math.Abs((int)transform.Y);
                 float colliderY = Math.Abs(transform.Y) - y + transform.Size.Height;
-                while (colliderY  > 0)
+                while (colliderY > 0)
                 {
                     if (x < SizeField.Width && y < SizeField.Height)
                     {
-                        if (_collisionMap[x, y] == true)
+                        if (_collisionMap[x, y].isBusy)
                         {
                             point = BackPosition(gameObject, x, -y);
-                            collisionObject = Core.Instance.GetElement(x, -y);
+                            collisionObject = _collisionMap[x,y].CellGameObject;
                             return true;
-                        }   
+                        }
+                        foreach (GameObject element in dynamicObject)
+                        {
+                            if (_dynamicCollisionMap[x, y].isBusy)
+                            {
+                                point = new PointF(transform.X, transform.Y);
+                                collisionObject = _dynamicCollisionMap[x, y].CellGameObject;
+                                return true;
+                            }
+                        }
                     }
                     y++;
                     colliderY--;
@@ -86,29 +91,40 @@ namespace DKFramework
                     break;
                 case Rotation.Left:
                     point = new PointF(x + transform.Size.Width - 1, transform.Y);
-                    break;   
+                    break;
             }
             return point;
         }
-     
 
-        private void CreateCollisionMap()
+        private void CreateDynamicCollisionMap(GameObject gameObject)
         {
-            for (int k = 0; k < _core.Count; k++)
-            {
-                float x = _core.GetElement(k).GetComponent<Transform>().X;
-                float y = Math.Abs(_core.GetElement(k).GetComponent<Transform>().Y);
-                for (int i = 0; i < _core.GetElement(k).GetComponent<Transform>().Size.Width; i++)
-                {
-                    for (int j = 0; j < _core.GetElement(k).GetComponent<Transform>().Size.Height; j++)
-                    {
-                        x += i;
-                        y += j;
+            _dynamicCollisionMap = NewCollisionMap();
 
-                        if ((x <= (_collisionMap.GetLength(0) - 1)) && (x > 0 || x == 0) && (y <= (_collisionMap.GetLength(1) - 1)) && (y > 0 || y == 0))
+            foreach (GameObject el in dynamicObject)
+            {
+                if (el.GetComponent<Collider>().CollisionLayer != gameObject.GetComponent<Collider>().CollisionLayer)
+                {
+                    Transform transform = el.GetComponent<Transform>();
+                    int x = Math.Abs((int)transform.X);
+
+                    float colliderX = transform.X - x + transform.Size.Width;
+
+                    while (colliderX > 0)
+                    {
+                        int y = Math.Abs((int)transform.Y);
+                        float colliderY = Math.Abs(transform.Y) - y + transform.Size.Height;
+                        while (colliderY > 0)
                         {
-                            _collisionMap[(int)x, (int)y] = true;
+                            if (x < SizeField.Width && y < SizeField.Height)
+                            {
+                                _dynamicCollisionMap[x, y].isBusy = true;
+                                _dynamicCollisionMap[x, y].CellGameObject = el;
+                            }
+                            y++;
+                            colliderY--;
                         }
+                        x++;
+                        colliderX--;
                     }
                 }
             }
@@ -117,8 +133,6 @@ namespace DKFramework
         public void Add(GameObject gameObject, bool isStatic)
         {
             if (isStatic)
-                dynamicObject.Add(gameObject);
-            else
             {
                 Transform transform = gameObject.GetComponent<Transform>();
                 int x = (int)Math.Abs(transform.X);
@@ -130,10 +144,15 @@ namespace DKFramework
                     {
                         if ((x <= (_collisionMap.GetLength(0) - 1)) && (y <= (_collisionMap.GetLength(1) - 1)))
                         {
-                            _collisionMap[x + i, y + j] = true;
+                            _collisionMap[x + i, y + j].isBusy = true;
+                            _collisionMap[x + i, y + j].CellGameObject = gameObject;
                         }
                     }
                 }
+            }
+            else
+            {
+                dynamicObject.Add(gameObject);
             }
         }
 
@@ -147,44 +166,74 @@ namespace DKFramework
                 {
                     if ((x <= (_collisionMap.GetLength(0) - 1)) && (y <= (_collisionMap.GetLength(1) - 1)))
                     {
-                        _collisionMap[x + i, y + j] = false;
+                        _collisionMap[x + i, y + j].isBusy = false;
                     }
                 }
             }
         }
 
-        //TODO сделать для флотовых координат
         public void Remove(Object sender, EventArgs e)
-        {
+        {  
             GameObject gameObject = (GameObject)sender;
             Transform transform = gameObject.GetComponent<Transform>();
-            Remove((int)transform.X, (int)transform.Y, transform.Size);
+
+            if (gameObject.GetComponent<Collider>().IsStatic)
+            {
+                int x = Math.Abs((int)transform.X);
+
+                float colliderX = transform.X - x + transform.Size.Width;
+
+                while (colliderX > 0)
+                {
+                    int y = Math.Abs((int)transform.Y);
+                    float colliderY = Math.Abs(transform.Y) - y + transform.Size.Height;
+                    while (colliderY > 0)
+                    {
+                        if (x < SizeField.Width && y < SizeField.Height)
+                        {
+                            _collisionMap[x, y].isBusy = false;
+                        }
+                        y++;
+                        colliderY--;
+                    }
+                    x++;
+                    colliderX--;
+                }
+            }
+            else
+            {
+                dynamicObject.Remove(gameObject);
+            }
         }
 
-
-        public void newCollisionMap()
+        public CellData[,] NewCollisionMap()
         {
-            _collisionMap = new bool[SizeField.Width, SizeField.Height];
+            var collisionMap = new CellData[SizeField.Width, SizeField.Height];
+
             for (int i = 0; i < SizeField.Width; i++)
             {
                 for (int j = 0; j < SizeField.Height; j++)
                 {
-                    _collisionMap[i, j] = false;
+                    collisionMap[i, j] = new CellData();
+                    collisionMap[i, j].isBusy = false;
                 }
             }
-            CreateCollisionMap();
+            return collisionMap;
         }
 
         public override void Update(float deltaTime)
         {
             GameObject collisionObject;
             PointF point;
-            foreach (GameObject element in dynamicObject)
+            for (int i = 0; i < dynamicObject.Count; i++)
             {
-                if (CrossingTest(element, out point,out collisionObject))
-                    element.SendMessage(new MessageCollision(point, collisionObject));
-                if (Leave(element, out point))
-                    element.SendMessage(new MessageCollision(point, collisionObject));
+                if (CrossingTest(dynamicObject[i], out point, out collisionObject))
+                    dynamicObject[i].SendMessage(new MessageCollision(point, collisionObject));
+            }
+            for (int i = 0; i < dynamicObject.Count; i++)
+            {
+                if (Leave(dynamicObject[i], out point))
+                    dynamicObject[i].SendMessage(new MessageCollision(point, null));
             }
         }
 
@@ -199,10 +248,10 @@ namespace DKFramework
                 point = new PointF(x, y);
                 return false;
             }
-                point = new PointF(
-                Mathem.Clamp(0, SizeField.Width - transform.Size.Width, transform.X),
-                Mathem.Clamp(-SizeField.Height + transform.Size.Height, 0, transform.Y));
-                return true;
+            point = new PointF(
+            Mathem.Clamp(0, SizeField.Width - transform.Size.Width, transform.X),
+            Mathem.Clamp(-SizeField.Height + transform.Size.Height, 0, transform.Y));
+            return true;
         }
 
     }

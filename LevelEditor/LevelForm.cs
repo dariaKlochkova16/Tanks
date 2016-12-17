@@ -120,7 +120,7 @@ namespace LevelEditor
                             if (!collisionComponentCore.CrossingTest(_gameObjectFakeGroup.GetElement(i, j)))
                             {
                                 Core.Instance.Add(_gameObjectFakeGroup.GetElement(i, j));
-                                collisionComponentCore.Add(_gameObjectFakeGroup.GetElement(i, j),false);
+                                collisionComponentCore.Add(_gameObjectFakeGroup.GetElement(i, j),true);
                             }
                         }
                     }

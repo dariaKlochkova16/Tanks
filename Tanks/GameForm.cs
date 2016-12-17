@@ -8,8 +8,6 @@ namespace Tanks
 {
     public partial class GameForm : Form
     {
-        private GameObject _tank;
-        private GameObject _enemy;
         private const int _orhto = 52;
 
         private DateTime _pastUpdateTime;
@@ -19,7 +17,7 @@ namespace Tanks
 
         private int _frameCounter = 0;
 
-        private MovementController _tankController;
+        private string _nameOpenFile;
 
         private bool keyPress;
 
@@ -33,12 +31,8 @@ namespace Tanks
 
             TextureCard = Core.Instance.GetComponent<ResoursMenager>().TextureCard;
 
-            CreatePlayer();
-            CreateEnemy();
-
             FPStimer.Interval = 1000;
             moveTimer.Start();
-            CoreTimer.Start();
             FPStimer.Start();
         }
 
@@ -50,44 +44,14 @@ namespace Tanks
             Core.Instance.AddComponent<GraphicComponentCore>();
             Core.Instance.AddComponent<CoreComponentPhyics>();
             Core.Instance.AddComponent<ResoursMenager>();
-            Core.Instance.AddComponent<CollisionComponentCore>();       
+            Core.Instance.AddComponent<CollisionComponentCore>();
+            Core.Instance.AddComponent<InputManager>();
+            Core.Instance.AddComponent<WinManager>();
+            Core.Instance.GetComponent<WinManager>().GameEnd += new EventHandler<string>(GameEnd);  
         }
-
-        private void CreateEnemy()
-        {
-            _enemy = GameObjectFactory.CreateGameObject(ObjectType.Enemy);
-            _enemy.GetComponent<Transform>().X = 10;
-            _enemy.GetComponent<Transform>().Y = -30;
-            _enemy.GetComponent<Collider>().Add();
-
-            Core.Instance.Add(_enemy);
-        }
-
-        private void CreatePlayer()
-        {
-            _tank = GameObjectFactory.CreateGameObject(ObjectType.Player);
-            _tank.GetComponent<Transform>().X = 30;
-            _tank.GetComponent<Transform>().Y = -30;
-            _tankController = _tank.GetComponent<MovementController>();
-            _tank.GetComponent<Collider>().Add();
-
-            Core.Instance.Add(_tank);
-
-            //for(int i = 0; i < Core.Instance.Count; i++)
-            //{
-            //    if (Core.Instance.GetElenent(i).Name == "Player")
-            //    {
-            //        _tank = Core.Instance.GetElenent(i);
-            //        _tankController = _tank.GetComponent<MovementController>();
-            //        break;
-            //    }
-            //}            
-        }
-
 
         private void openGLControl1_OpenGLDraw(object sender, RenderEventArgs e)
         {
-            //  Get the OpenGL object, for quick access.
             OpenGL gl = this.openGLControl1.OpenGL;
 
             gl.MatrixMode(OpenGL.GL_PROJECTION);
@@ -99,7 +63,6 @@ namespace Tanks
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
 
             Core.Instance.Draw();
-           
 
             gl.Flush();
 
@@ -126,16 +89,19 @@ namespace Tanks
             openFileDialog1.RestoreDirectory = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Core.Instance.ReCreate();
+                InitCore();
                 LevelFile.Open(openFileDialog1.FileName);
-            // CreatePlayer();
+            }
+
+            CoreTimer.Start();
+            _nameOpenFile = openFileDialog1.FileName;
             openGLControl1.Refresh();
         }
 
         private void openGLControl1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if (_tank != null)
-                if (!_tank.GetComponent<MovementController>().Moving)
-                {
                     switch (e.KeyCode)
                     {
                         case Keys.Down:
@@ -162,16 +128,12 @@ namespace Tanks
                             Shot();
                             break;
                     }
-                }
         }
 
         private void SetRotation(Rotation rot)
         {
-            if (_tank != null)
-            {
-                _tank.GetComponent<Transform>().Rotaton = rot;
+                Core.Instance.GetComponent<InputManager>().Rotate(rot);
                 keyPress = true;
-            }
         }
 
         private void Shot()
@@ -179,8 +141,7 @@ namespace Tanks
             TimeSpan deltaTime = DateTime.Now - _pastShoot;
             if (deltaTime.TotalMilliseconds > 1000)
             {
-                var bullet = _tank.GetComponent<ShootComponent>().Shoot();
-                Core.Instance.Add(bullet);
+                Core.Instance.GetComponent<InputManager>().Shoot();
                 _pastShoot = DateTime.Now;
             }
         }
@@ -234,7 +195,25 @@ namespace Tanks
         private void moveTimer_Tick(object sender, EventArgs e)
         {
             if (keyPress)
-                _tankController.MakeMovement(1);
+                Core.Instance.GetComponent<InputManager>().MakeMovement();
         }
+        private void GameEnd(object sender, string e)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+           var result =  MessageBox.Show(this, e+"Начать заново?","Конец игры", buttons);
+
+            if(result ==  DialogResult.Yes)
+            {
+                Core.Instance.ReCreate();
+                InitCore();
+                LevelFile.Open(_nameOpenFile);
+            }
+
+            if(result == DialogResult.No)
+            {
+                CoreTimer.Stop();
+            }
+        }
+
     }
 }

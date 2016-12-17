@@ -12,6 +12,7 @@
         public void DamageCaused(int damage)
         {
             Health -= damage;
+
             if (Health <= 0)
                 Core.Instance.Remove(LinkGameObject);
         }

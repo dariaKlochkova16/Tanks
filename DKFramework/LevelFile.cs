@@ -17,7 +17,9 @@ namespace DKFramework
                 GameObject elementGame = GameObjectFactory.CreateGameObject(ObjectTypeTools.Convert(element.name));
                 elementGame.GetComponent<Transform>().X = element.point.X;
                 elementGame.GetComponent<Transform>().Y = element.point.Y;
-                elementGame.GetComponent<Collider>().Add();
+                if (elementGame.GetComponent<Collider>() != null)
+                    elementGame.GetComponent<Collider>().Add();
+          
               
                 Core.Instance.Add(elementGame);
             }

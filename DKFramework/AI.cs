@@ -14,6 +14,7 @@ namespace DKFramework
             _movementController = LinkGameObject.GetComponent<MovementController>();
             _transform = LinkGameObject.GetComponent<Transform>();
             LinkGameObject.MessageReceived += MessageReceived;
+            _pastShoot = DateTime.Now;
         }
 
         public override void Update(float deltaTime)
@@ -21,25 +22,34 @@ namespace DKFramework
             _movementController.MakeMovement(1);
 
             TimeSpan _deltaTime = DateTime.Now - _pastShoot;
-            if (_deltaTime.TotalMilliseconds > 5000)
+            if (_deltaTime.TotalMilliseconds > 2000)
             {
                 var bullet = LinkGameObject.GetComponent<ShootComponent>().Shoot();
+                bullet.GetComponent<Collider>().CollisionLayer = CollisionLayer.EnemyBullet;
                 Core.Instance.Add(bullet);
                 _pastShoot = DateTime.Now;
             }
         }
 
+        //TODO 
         private void MessageReceived(object sender, MessageBase message)
         {
-            Rotate();
+            GameObject gameObject = new GameObject("");
+            if (message is MessageCollision)
+            {
+                MessageCollision messageCollision = (MessageCollision)message;
+                gameObject = messageCollision.GameObject;
+            }
+            if(gameObject != null && gameObject.Name != "Bullet")
+                     Rotate();
+            if(gameObject == null)
+                Rotate();
         }
 
         private void Rotate()
         {
-            Random rand = new Random();
-          
-                _transform.Rotaton = (Rotation)rand.Next(0, 4);
-           
+            Random rand = new Random(); 
+           _transform.Rotaton = (Rotation)rand.Next(0, 4);     
         }
     }
 }
