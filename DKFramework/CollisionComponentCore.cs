@@ -103,7 +103,7 @@ namespace DKFramework
                 colliderX--;
             }
             point = new PointF();
-            collisionObject = new GameObject("");
+            collisionObject = new GameObject(ObjectType.None);
             return false;
         }
 

@@ -111,7 +111,9 @@
     <Content Include="gamestart.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TextureCard.png" />
+    <Content Include="TextureCard.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TextureDescriptor.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

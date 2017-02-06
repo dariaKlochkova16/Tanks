@@ -108,10 +108,9 @@ namespace DKFramework
 
         public GameObject FindElement(ObjectType objectType)
         {
-            string name = objectType.ToString();
             for (int i = 0; i < Count; i++)
             {
-                if (Core.Instance._elements[i].Name == name)
+                if (Core.Instance._elements[i].NameType == objectType)
                 {
                     var gameObject = _elements[i];
                     return gameObject; 

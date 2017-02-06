@@ -7,7 +7,7 @@ namespace DKFramework
         public static GameObject CreateGameObject(ObjectType objectType)
         {
             var TextureCard = Core.Instance.GetComponent<ResoursMenager>().TextureCard;
-            var gameObject = new GameObject(objectType.ToString());
+            var gameObject = new GameObject(objectType);
             gameObject.AddComponent<Transform>();
             gameObject.AddComponent<Render>();
             gameObject.GetComponent<Render>().TextureFileName = "TextureCard.png";

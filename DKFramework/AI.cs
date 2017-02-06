@@ -34,13 +34,13 @@ namespace DKFramework
         //TODO 
         private void MessageReceived(object sender, MessageBase message)
         {
-            GameObject gameObject = new GameObject("");
+            GameObject gameObject = new GameObject(ObjectType.None);
             if (message is MessageCollision)
             {
                 MessageCollision messageCollision = (MessageCollision)message;
                 gameObject = messageCollision.GameObject;
             }
-            if(gameObject != null && gameObject.Name != "Bullet")
+            if(gameObject != null && gameObject.NameType != ObjectType.Base)
                      Rotate();
             if(gameObject == null)
                 Rotate();

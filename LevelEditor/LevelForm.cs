@@ -361,7 +361,7 @@ namespace LevelEditor
         {
             for (int i = 0; i < Core.Instance.Count; i++)
             {
-                if (Core.Instance.GetElement(i).Name == objectType.ToString())
+                if (Core.Instance.GetElement(i).NameType == objectType)
                 {
                     return true;
                 }

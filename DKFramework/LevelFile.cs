@@ -33,7 +33,7 @@ namespace DKFramework
             for (int i = 0; i < Core.Instance.Count; i++)
             {
                 saveObjects[i] = new SaveObject();
-                saveObjects[i].name = Core.Instance.GetElement(i).Name;
+                saveObjects[i].name = Core.Instance.GetElement(i).NameType.ToString();
                 saveObjects[i].point = new PointF(Core.Instance.GetElement(i).GetComponent<Transform>().X, Core.Instance.GetElement(i).GetComponent<Transform>().Y);
             }
 

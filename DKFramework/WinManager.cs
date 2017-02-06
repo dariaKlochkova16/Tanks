@@ -13,17 +13,17 @@ namespace DKFramework
         private void EndTest(object sender, EventArgs e)
         {
             GameObject gameObject = (GameObject)sender;
-            switch(gameObject.Name)
+            switch(gameObject.NameType)
             {
-                case "Player":
+                case ObjectType.Player:
                     if (Core.Instance.FindElement(ObjectType.Player) == null)
                         GameEnd(this, "Вы проиграли");
                     break;
-                case "Enemy":
+                case ObjectType.Enemy:
                     if (Core.Instance.FindElement(ObjectType.Enemy) == null)
                         GameEnd(this, "Вы выйграли");
                     break;
-                case "Base":
+                case ObjectType.Base:
                     GameEnd(this, "Вы проиграли");
                     break;
             }

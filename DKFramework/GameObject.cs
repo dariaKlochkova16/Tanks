@@ -6,15 +6,15 @@ namespace DKFramework
 {
     public class GameObject
     {
-        public string Name { get; set; }
+        public ObjectType NameType { get; set; }
 
         private readonly List<ComponentBase> _listComponents = new List<ComponentBase>();
 
         public event EventHandler<MessageBase> MessageReceived;
 
-        public GameObject(string name)
+        public GameObject(ObjectType name)
         {
-            Name = name;
+            NameType = name;
         }
 
         public void AddComponent<T>() where T : ComponentBase
