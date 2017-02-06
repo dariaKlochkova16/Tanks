@@ -10,6 +10,8 @@ namespace DKFramework
         private CellData[,] _collisionMap;
         private CellData[,] _dynamicCollisionMap;
 
+        private bool[,] _collisionLayersMap;
+
         public Size SizeField
         {
             get; set;
@@ -22,6 +24,37 @@ namespace DKFramework
             SizeField = Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField;
             _collisionMap = NewCollisionMap();
             dynamicObject = new List<GameObject>();
+            InitCollisionLayersMap();
+        }
+
+        private void InitCollisionLayersMap()
+        {
+            const int mapSize = 11;
+            _collisionLayersMap = new bool[mapSize, mapSize];
+
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    if (i == j)
+                    {
+                        _collisionLayersMap[i, j] = false;
+                    }
+                    else
+                    {
+                        _collisionLayersMap[i, j] = true;
+                    }
+
+                }
+            }
+
+            _collisionLayersMap[(int)ObjectType.Bullet, (int)ObjectType.Water] = false;
+            _collisionLayersMap[(int)ObjectType.Water, (int)ObjectType.Bullet] = false;
+
+            _collisionLayersMap[(int)ObjectType.Bullet, (int)ObjectType.Ice] = false;
+            _collisionLayersMap[(int)ObjectType.Ice, (int)ObjectType.Bullet] = false;
+
+
         }
 
         public bool CrossingTest(GameObject gameObject)
