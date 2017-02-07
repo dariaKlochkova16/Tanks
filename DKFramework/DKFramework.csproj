@@ -61,6 +61,7 @@
     <Compile Include="CoreComponentBase.cs" />
     <Compile Include="CoreComponentPhyics.cs" />
     <Compile Include="DamagedReceiver.cs" />
+    <Compile Include="FieldGraphComponentCore.cs" />
     <Compile Include="GraphVertex.cs" />
     <Compile Include="WinManager.cs" />
     <Compile Include="GameObjectFactory.cs" />

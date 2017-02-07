@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace DKFramework
 {
@@ -14,6 +15,11 @@ namespace DKFramework
         }
 
         public PointF Position { get; set; }
+
+        public PointF AbsPosition
+        {
+            get { return new PointF(Math.Abs(X), Math.Abs(Y));}
+        }
 
         public float X
         {

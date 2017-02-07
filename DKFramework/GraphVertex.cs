@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace DKFramework
 {
-    class GraphVertex 
+    public class GraphVertex 
     {
         public GraphVertex CameFrom;
         public float G;

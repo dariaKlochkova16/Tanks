@@ -13,7 +13,7 @@
 
         public void Add()
         {
-            Core.Instance.GetComponent<CollisionComponentCore>().Add(LinkGameObject,IsStatic);
+            Core.Instance.GetComponent<CollisionComponentCore>().Add(LinkGameObject);
         }
     }
 }

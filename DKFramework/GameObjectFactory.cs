@@ -4,93 +4,117 @@ namespace DKFramework
 {
     public static class GameObjectFactory
     {
+        private static GameObject gameObject;
+
         public static GameObject CreateGameObject(ObjectType objectType)
         {
-            var TextureCard = Core.Instance.GetComponent<ResoursMenager>().TextureCard;
-            var gameObject = new GameObject(objectType);
-            gameObject.AddComponent<Transform>();
-            gameObject.AddComponent<Render>();
-            gameObject.GetComponent<Render>().TextureFileName = "TextureCard.png";
-            gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-            gameObject.AddComponent<DamagedReceiver>();
-            gameObject.GetComponent<DamagedReceiver>().Health = 1;
- 
+            gameObject = new GameObject(objectType);
+            AddRender();
+           
+
             switch (objectType)
             {
                 case ObjectType.BrickWall:
-                    gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-                    gameObject.GetComponent<Transform>().Z = 0;
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = true;
+                    AddTransform(new Size(1, 1), 0);
+                    AddCollider(true);
+                    AddDamaged(1);
                     break;
                 case ObjectType.ConcreteWall:
-                    gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(1, 1);
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = true;
-                    gameObject.GetComponent<Transform>().Z = 0;
+                    AddTransform(new Size(1, 1), 0);
+                    AddCollider(true);
                     break;
                 case ObjectType.Forest:
-                    gameObject.GetComponent<Transform>().Z = 1;
+                    AddTransform(new Size(1, 1), 1);
                     break;
                 case ObjectType.Ice:
-                    gameObject.GetComponent<Transform>().Z = -1;
-                    //gameObject.AddComponent<Collider>();
-                    //gameObject.GetComponent<Collider>().IsStatic = true;
+                    AddTransform(new Size(1, 1), -1);
                     break;
                 case ObjectType.Water:
-                    gameObject.GetComponent<Transform>().Z = -1;
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = true;
+                    AddTransform(new Size(1, 1), -1);
+                    AddCollider(true);
                     break;
                 case ObjectType.Base:
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = true;
-                    gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(3, 3);
-                    gameObject.GetComponent<Transform>().Z = 0;
+                    AddCollider(true);
+                    AddTransform(new Size(3, 3), 0);
+                    AddDamaged(1);
                     break;
                 case ObjectType.Enemy:
-                    gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
-                    gameObject.AddComponent<MovementController>();
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = false;
+                    InitPlayer(CollisionLayer.EnemyBullet, 5);
                     gameObject.AddComponent<AI>();
-                    gameObject.AddComponent<ShootComponent>();
-                    gameObject.GetComponent<Collider>().CollisionLayer = CollisionLayer.EnemyBullet;
-                    gameObject.GetComponent<Transform>().Z = 0;
                     break;
                 case ObjectType.Player:
-                    gameObject.GetComponent<Transform>().Size = new System.Drawing.Size(2, 2);
-                    gameObject.AddComponent<MovementController>();
-                    gameObject.AddComponent<ShootComponent>();
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = false;
-                    gameObject.GetComponent<Collider>().CollisionLayer = CollisionLayer.PlayerBullet;
-                    gameObject.GetComponent<MovementController>().Velocity = 8;
-                    gameObject.GetComponent<Transform>().Z = 0;
+                    InitPlayer(CollisionLayer.PlayerBullet, 8);
                     break;
                 case ObjectType.Bullet:
-                    gameObject.AddComponent<MovementController>();
+                    AddTransform(new Size(1, 1), 0);
+                    AddMovementController(10);
                     gameObject.AddComponent<BulletController>();
-                    gameObject.AddComponent<Collider>();
-                    gameObject.GetComponent<Collider>().IsStatic = false;
-                    gameObject.GetComponent<MovementController>().Velocity = 10;
-                    gameObject.GetComponent<Transform>().Z = 0;
+                    AddCollider(false);
+                    AddDamaged(1);
                     break;
                 default:
                     gameObject = null;
                     break;
             }
-        
+            return gameObject;
+        }
+
+        private static void AddRender()
+        {
+            gameObject.AddComponent<Render>();
+            gameObject.GetComponent<Render>().TextureFileName = "TextureCard.png";
+
+            var TextureCard = Core.Instance.GetComponent<ResoursMenager>().TextureCard;
             foreach (TextureDescriptor element in TextureCard)
             {
-                if (element.Name == objectType.ToString())
+                if (element.Name == gameObject.NameType.ToString())
                 {
                     gameObject.GetComponent<Render>().RectangleImage = new Rectangle(element.Point, element.Size);
                     break;
                 }
             }
-
-            return gameObject;
         }
+
+        private static void InitPlayer(CollisionLayer layer, int velocity)
+        {
+            AddTransform(new Size(2, 2), 0);
+            gameObject.AddComponent<ShootComponent>();
+            AddCollider(false, layer);
+            AddMovementController(velocity);
+            AddDamaged(1);
+        }
+
+        private static void AddTransform(Size size, int z)
+        {
+            gameObject.AddComponent<Transform>();
+            gameObject.GetComponent<Transform>().Size = size;
+            gameObject.GetComponent<Transform>().Z = z;
+        }
+
+        private static void AddMovementController(int velocity)
+        {
+            gameObject.AddComponent<MovementController>();
+            gameObject.GetComponent<MovementController>().Velocity = velocity;
+        }
+
+        private static void AddCollider(bool isStatic)
+        {
+            gameObject.AddComponent<Collider>();
+            gameObject.GetComponent<Collider>().IsStatic = isStatic;
+        }
+
+        private static void AddCollider(bool isStatic, CollisionLayer layer)
+        {
+            AddCollider(isStatic);
+            gameObject.GetComponent<Collider>().CollisionLayer = layer;
+        }
+
+        private static void AddDamaged(int health)
+        {
+            gameObject.AddComponent<DamagedReceiver>();
+            gameObject.GetComponent<DamagedReceiver>().Health = health;
+        }
+
+
     }
 }

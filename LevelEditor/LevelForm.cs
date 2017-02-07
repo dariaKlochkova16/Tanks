@@ -92,11 +92,8 @@ namespace LevelEditor
         {
             //  Get the OpenGL object, for quick access.
             OpenGL gl = this.openGLControl1.OpenGL;
-
             //  A bit of extra initialisation here, we have to enable textures.
             gl.Enable(OpenGL.GL_TEXTURE_2D);
-
-
             // _glImage = new GLImage("Crate.bmp", gl, 0, 0, 0);   
         }
 
@@ -120,7 +117,7 @@ namespace LevelEditor
                             if (!collisionComponentCore.CrossingTest(_gameObjectFakeGroup.GetElement(i, j)))
                             {
                                 Core.Instance.Add(_gameObjectFakeGroup.GetElement(i, j));
-                                collisionComponentCore.Add(_gameObjectFakeGroup.GetElement(i, j),true);
+                                _gameObjectFakeGroup.GetElement(i, j).GetComponent<Collider>().Add();
                             }
                         }
                     }

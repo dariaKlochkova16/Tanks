@@ -42,12 +42,13 @@ namespace Tanks
             Core.Instance.GLControl = openGLControl1.OpenGL;
             Core.Instance.AddComponent<SizeFieldComponentCore>();
             Core.Instance.GetComponent<SizeFieldComponentCore>().SizeField = new Size(_orhto, _orhto);
+            Core.Instance.AddComponent<FieldGraphComponentCore>();
             Core.Instance.AddComponent<GraphicComponentCore>();
             Core.Instance.AddComponent<CoreComponentPhyics>();
             Core.Instance.AddComponent<ResoursMenager>();
             Core.Instance.AddComponent<CollisionComponentCore>();
             Core.Instance.AddComponent<InputManager>();
-            Core.Instance.AddComponent<WinManager>();
+            Core.Instance.AddComponent<WinManager>(); 
             Core.Instance.GetComponent<WinManager>().GameEnd += new EventHandler<string>(GameEnd);
         }
 

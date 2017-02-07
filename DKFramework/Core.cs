@@ -8,14 +8,20 @@ namespace DKFramework
     public class Core
     {
         public event EventHandler DiedGameObject;
-
+        private static Object lockObject = new Object();
         private static Core _instance;
         public static Core Instance
         {
             get
             {
                 if (_instance == null)
-                    _instance = new Core();
+                {
+                    lock (lockObject)
+                    {
+                        if (_instance == null)
+                            _instance = new Core();
+                    }
+                }
                 return _instance;
             }
         }
