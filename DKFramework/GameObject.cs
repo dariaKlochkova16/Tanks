@@ -12,7 +12,7 @@ namespace DKFramework
 
         public event EventHandler<MessageBase> MessageReceived;
 
-        public GameObject(ObjectType name)
+        public GameObject(ObjectType name)  
         {
             NameType = name;
         }

@@ -85,7 +85,7 @@ namespace DKFramework
             {
                 LinkGameObject.GetComponent<Transform>().Position = _finishPosition;
                 Moving = false;
-                if(EndMovement != null)
+                //if(EndMovement != null)
                    // EndMovement(this, new EventArgs());
                 return;
             }

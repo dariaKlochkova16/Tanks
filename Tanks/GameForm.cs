@@ -201,6 +201,7 @@ namespace Tanks
         }
         private void GameEnd(object sender, string e)
         {
+            CoreTimer.Stop();
             playSound("gameover.wav");
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             var result = MessageBox.Show(this, e + "Начать заново?", "Конец игры", buttons);
@@ -208,6 +209,7 @@ namespace Tanks
             if (result == DialogResult.Yes)
             {
                 NewGame(_nameOpenFile);
+                CoreTimer.Start();
             }
 
             if (result == DialogResult.No)

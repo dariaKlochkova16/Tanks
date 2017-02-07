@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace DKFramework
 {
@@ -6,7 +7,7 @@ namespace DKFramework
     {
         public static float Lerp(float a, float b, float t)
         {
-            return a + (b - a) * t;
+                return a + (b - a) * t; 
         }
 
         public static PointF Lerp(PointF a, PointF b, float t)
@@ -25,6 +26,12 @@ namespace DKFramework
                 return max;
 
             return value;
+        }
+
+        public static bool AboutEqual(double x, double  y)
+        {
+            double epsilon = Math.Max(Math.Abs(x), Math.Abs(y)) * 1E-15;
+            return Math.Abs(x - y) <= epsilon;
         }
     }
 }

@@ -98,7 +98,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="eraser.png" />
-    <Content Include="grid.png" />
+    <Content Include="grid.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TextureCard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

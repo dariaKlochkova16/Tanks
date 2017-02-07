@@ -34,9 +34,13 @@ namespace DKFramework
                     break;
                 case ObjectType.Ice:
                     gameObject.GetComponent<Transform>().Z = -1;
+                    //gameObject.AddComponent<Collider>();
+                    //gameObject.GetComponent<Collider>().IsStatic = true;
                     break;
                 case ObjectType.Water:
                     gameObject.GetComponent<Transform>().Z = -1;
+                    gameObject.AddComponent<Collider>();
+                    gameObject.GetComponent<Collider>().IsStatic = true;
                     break;
                 case ObjectType.Base:
                     gameObject.AddComponent<Collider>();

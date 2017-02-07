@@ -54,6 +54,12 @@ namespace DKFramework
             _collisionLayersMap[(int)ObjectType.Bullet, (int)ObjectType.Ice] = false;
             _collisionLayersMap[(int)ObjectType.Ice, (int)ObjectType.Bullet] = false;
 
+            _collisionLayersMap[(int)ObjectType.Player, (int)ObjectType.Ice] = false;
+            _collisionLayersMap[(int)ObjectType.Ice, (int)ObjectType.Player] = false;
+
+            _collisionLayersMap[(int)ObjectType.Enemy, (int)ObjectType.Ice] = false;
+            _collisionLayersMap[(int)ObjectType.Ice, (int)ObjectType.Enemy] = false;
+
 
         }
 
@@ -80,7 +86,7 @@ namespace DKFramework
                 {
                     if (x < SizeField.Width && y < SizeField.Height)
                     {
-                        if (_collisionMap[x, y].isBusy)
+                        if (_collisionMap[x, y].isBusy && _collisionLayersMap[(int)_collisionMap[x, y].CellGameObject.NameType, (int)gameObject.NameType])
                         {
                             point = BackPosition(gameObject, x, -y);
                             collisionObject = _collisionMap[x,y].CellGameObject;
@@ -88,7 +94,7 @@ namespace DKFramework
                         }
                         foreach (GameObject element in dynamicObject)
                         {
-                            if (_dynamicCollisionMap[x, y].isBusy)
+                            if (_dynamicCollisionMap[x, y].isBusy && _collisionLayersMap[(int)_dynamicCollisionMap[x, y].CellGameObject.NameType, (int)gameObject.NameType])
                             {
                                 point = new PointF(transform.X, transform.Y);
                                 collisionObject = _dynamicCollisionMap[x, y].CellGameObject;
